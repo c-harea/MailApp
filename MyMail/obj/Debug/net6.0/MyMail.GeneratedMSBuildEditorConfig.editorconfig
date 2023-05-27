@@ -1,0 +1,69 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = MyMail
+build_property.RootNamespace = MyMail
+build_property.ProjectDir = D:\Docs\UTM Folder\Anul 3\TMPS\Proiect curs\MyMail\MyMail\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\Docs\UTM Folder\Anul 3\TMPS\Proiect curs\MyMail\MyMail
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Home/GetImap.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHZXRJbWFwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Home/GetPop3.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHZXRQb3AzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Home/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Home/Mail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNYWlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Home/SendMail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTZW5kTWFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Home/Server.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTZXJ2ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Docs/UTM Folder/Anul 3/TMPS/Proiect curs/MyMail/MyMail/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-49fjficsw1
