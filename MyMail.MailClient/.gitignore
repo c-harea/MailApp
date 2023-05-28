@@ -1,0 +1,70 @@
+# ASP.NET
+
+## Build Results
+
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio files
+.vs/
+.vscode/
+
+# Test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+[Tt]est[Rr]un.*
+*.VisualState.xml
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Publish / Web Generated
+*.[Pp]ublish.xml
+*.publishsettings
+Publish/
+
+# NuGet Packages
+## Including a glob pattern, exclude file(s) matching the pattern
+# packages.config
+#**/packages.config
+
+# Package Management
+## Including a glob pattern, exclude file(s) matching the pattern
+# nuget.config
+# NuGet.Config
+# *.nupkg
+# *.pfx
+# .paket/paket.exe
+# paket.lock
+# paket.restore.targets
+
+# Others
+msbuild.log
+*.*proj.user
