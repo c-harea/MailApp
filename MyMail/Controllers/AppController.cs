@@ -78,9 +78,15 @@ namespace MyMail.Controllers
         {
            MyImapClient.Initialize();
 
-           var mails = MyImapClient.GetNextMails(4);
            var downloadedMails = new List<DownloadedMail>();
 
+           var mails = MyImapClient.GetNextMails(4);
+
+            if (downloadedMails.Count > 0)
+            {
+                downloadedMails.Clear();
+            }
+            
             foreach (var mail in mails)
             {
                 downloadedMails.Add(new DownloadedMail
@@ -89,6 +95,7 @@ namespace MyMail.Controllers
                     Subject = mail.Subject,
                     SenderName= mail.SenderName,
                     SenderEmail= mail.SenderEmail,
+                    Body = mail.Body
                 });
             }
 
@@ -127,6 +134,7 @@ namespace MyMail.Controllers
                     Subject = mail.Subject,
                     SenderName = mail.SenderName,
                     SenderEmail = mail.SenderEmail,
+                    Body= mail.Body
                 });
             }
 
@@ -201,6 +209,19 @@ namespace MyMail.Controllers
 
             return View("Login");
 		}
+
+        public IActionResult ViewMail(string SenderEmail, string SenderName, string Body, string Subject) {
+
+            DownloadedMail mail = new DownloadedMail
+            {
+                SenderEmail = SenderEmail,
+                SenderName = SenderName,
+                Body = Body,
+                Subject = Subject
+            };
+
+            return View(mail);
+        }
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
