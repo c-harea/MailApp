@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sJ9D1araHRB5ESTSQ0vo+CHXFuK5tu14r3VLqFxdkKs=",
+  "Hash": "rv2DAyDzHESH7SRzZ8s1jdPdDsaeMHUUTop4J7ZLayU=",
   "Source": "MyMail",
   "BasePath": "_content/MyMail",
   "Mode": "Default",
@@ -83,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect curs\\MyMail\\MyMail\\wwwroot\\download.svg",
+      "SourceId": "MyMail",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect curs\\MyMail\\MyMail\\wwwroot\\",
+      "BasePath": "_content/MyMail",
+      "RelativePath": "download.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\download.svg"
     },
     {
       "Identity": "D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect curs\\MyMail\\MyMail\\wwwroot\\favicon.ico",

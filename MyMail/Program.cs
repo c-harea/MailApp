@@ -1,4 +1,7 @@
+
+
 var builder = WebApplication.CreateBuilder(args);
+var tempPath = "D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp";
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -25,11 +28,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=App}/{action=Server}/{id?}");
 
-if (System.IO.Directory.Exists("D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp") == true)
+if (System.IO.Directory.Exists(tempPath) == true)
 {
-    System.IO.Directory.Delete("D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp", true);
+    System.IO.Directory.Delete(tempPath, true);
 }
 
-System.IO.Directory.CreateDirectory("D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp");
+System.IO.Directory.CreateDirectory(tempPath);
 
 app.Run();

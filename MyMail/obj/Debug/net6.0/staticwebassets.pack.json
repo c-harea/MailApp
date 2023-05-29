@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect curs\\MyMail\\MyMail\\wwwroot\\download.svg",
+      "PackagePath": "staticwebassets\\download.svg"
+    },
+    {
       "Id": "D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect curs\\MyMail\\MyMail\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
