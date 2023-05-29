@@ -23,7 +23,7 @@ namespace MyMail.MailClient
                 try
                 {
                     client.Connect("imap." + Program.MailConfiguration.ServerName, Program.MailConfiguration.ImapPort, SecureSocketOptions.SslOnConnect);
-                    client.Authenticate(Program.MailConfiguration.Username, Program.MailConfiguration.Password);
+                    client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
                     client.Inbox.Open(FolderAccess.ReadOnly);
 
                     finish = client.Inbox.Count;
@@ -47,7 +47,7 @@ namespace MyMail.MailClient
                 try
                 {
                     client.Connect("imap." + Program.MailConfiguration.ServerName, Program.MailConfiguration.ImapPort, SecureSocketOptions.SslOnConnect);
-                    client.Authenticate(Program.MailConfiguration.Username, Program.MailConfiguration.Password);
+                    client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
                     client.Inbox.Open(FolderAccess.ReadOnly);
 
                     finish -= count;
@@ -90,7 +90,7 @@ namespace MyMail.MailClient
                 try
                 {
                     client.Connect("imap." + Program.MailConfiguration.ServerName, Program.MailConfiguration.ImapPort, SecureSocketOptions.SslOnConnect);
-                    client.Authenticate(Program.MailConfiguration.Username, Program.MailConfiguration.Password);
+                    client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
                     client.Inbox.Open(FolderAccess.ReadOnly);
 
                     var message = client.Inbox.GetMessage(index);

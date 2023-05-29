@@ -11,6 +11,10 @@
 		<div class="col-md-6">
 			<form method="post" asp-action="LogUser">
 				<div class="mb-3">
+					<label asp-for="Alias" class="form-label"></label>
+					<input type="text" class="form-control" asp-for="Alias">
+				</div>
+				<div class="mb-3">
 					<label asp-for="Email" class="form-label"></label>
 					<input type="text" class="form-control" asp-for="Email">
 				</div>

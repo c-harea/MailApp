@@ -12,7 +12,8 @@ namespace MailClient
     {
         public static void Init(User user)
         {
-            Program.MailConfiguration.Username = user.Email;
+            Program.MailConfiguration.Alias = user.Alias;
+            Program.MailConfiguration.Email = user.Email;
             Program.MailConfiguration.Password = user.Password;
         }
 
@@ -24,21 +25,21 @@ namespace MailClient
                 {
                     // SMTP
                     smtp.Connect("smtp." + Program.MailConfiguration.ServerName, Program.MailConfiguration.SmtpPort, SecureSocketOptions.Auto);
-                    smtp.Authenticate(Program.MailConfiguration.Username, Program.MailConfiguration.Password);
+                    smtp.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
                 }
 
                 using (var pop3 = new Pop3Client())
                 {
                     // POP3
                     pop3.Connect("pop." + Program.MailConfiguration.ServerName, Program.MailConfiguration.Pop3Port, SecureSocketOptions.Auto);
-                    pop3.Authenticate(Program.MailConfiguration.Username, Program.MailConfiguration.Password);
+                    pop3.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
                 }
 
                 using (var imap = new ImapClient())
                 {
                     // IMAP
                     imap.Connect("imap." + Program.MailConfiguration.ServerName, Program.MailConfiguration.ImapPort, SecureSocketOptions.Auto);
-                    imap.Authenticate(Program.MailConfiguration.Username, Program.MailConfiguration.Password);
+                    imap.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
                 }
 
                 return true;

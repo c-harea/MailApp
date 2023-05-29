@@ -19,7 +19,7 @@ namespace MyMail.MailClient
             bodyBuilder.TextBody = mail.Body;
 
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(mail.SenderName, Program.MailConfiguration.Username));
+            message.From.Add(new MailboxAddress(Program.MailConfiguration.Alias, Program.MailConfiguration.Email));
             message.To.Add(new MailboxAddress(mail.RecipientName, mail.RecipientEmail));
             message.Subject = mail.Subject;
 
@@ -57,7 +57,7 @@ namespace MyMail.MailClient
                 try
                 {
                     client.Connect(("smtp." + Program.MailConfiguration.ServerName), Program.MailConfiguration.SmtpPort, SecureSocketOptions.StartTls);
-                    client.Authenticate(Program.MailConfiguration.Username, Program.MailConfiguration.Password);
+                    client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
                     client.Send(message);
 
            
