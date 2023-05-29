@@ -46,7 +46,6 @@ namespace MyMail.Controllers
             {
                 RecipientName = model.RecipientName,
                 RecipientEmail = model.RecipientEmail,
-                SenderName = model.SenderName,
                 Subject = model.Subject,
                 Body = model.Body,
                 AttachmentPaths = new List<string>()
@@ -144,8 +143,9 @@ namespace MyMail.Controllers
 		{
             User user = new User()
             {
-                Email= model.Email,
-                Password= model.Password,
+                Email = model.Email,
+                Password = model.Password,
+                Alias = model.Alias
             };
 
             UserConnect.Init(user);

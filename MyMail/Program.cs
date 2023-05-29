@@ -25,4 +25,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=App}/{action=Server}/{id?}");
 
+if (System.IO.Directory.Exists("D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp") == true)
+{
+    System.IO.Directory.Delete("D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp", true);
+}
+
+System.IO.Directory.CreateDirectory("D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp");
+
 app.Run();

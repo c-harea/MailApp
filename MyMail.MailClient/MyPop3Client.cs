@@ -20,7 +20,7 @@ namespace MyMail.MailClient
                 try
                 {
                     client.Connect("pop." + Program.MailConfiguration.ServerName, Program.MailConfiguration.Pop3Port, true);
-                    client.Authenticate(Program.MailConfiguration.Username, Program.MailConfiguration.Password);
+                    client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
 
                     int start = client.GetMessageCount();
                     int finish = Math.Max(0, start - count);
