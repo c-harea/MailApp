@@ -5,16 +5,16 @@ namespace MyMail.Models
 	public class ServerModel
 	{
 		[Display(Name = "Server Name: ")]
-		public string ServerName { get; set; }
+		public string ServerName { get; set; } = string.Empty;
 
 		[Display(Name = "SMTP Port: ")]
-		public string SmtpPort { get; set; }
+		public int SmtpPort { get; set; } = 587;
 
 		[Display(Name = "POP3 Port: ")]
-		public string Pop3Port { get; set; }
+		public int Pop3Port { get; set; } = 995;
 
 		[Display(Name = "IMAP Port: ")]
-		public string ImapPort { get; set; }
+		public int ImapPort { get; set; } = 993;
 
 	}
 }
