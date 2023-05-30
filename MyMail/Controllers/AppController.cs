@@ -13,6 +13,11 @@ namespace MyMail.Controllers
     public class AppController : Controller
     {
         private readonly ILogger<AppController> _logger;
+        private static GMailClient _imapClient;
+        private static GMailClient _pop3Client;
+
+        private static List<DownloadedMail> _imapMails = new List<DownloadedMail>();
+        private static List<DownloadedMail> _pop3Mails = new List<DownloadedMail>();
 
         public AppController(ILogger<AppController> logger)
         {
@@ -76,46 +81,35 @@ namespace MyMail.Controllers
 
         public IActionResult GetImap()
         {
-           MyImapClient.Initialize();
 
-           var downloadedMails = new List<DownloadedMail>();
-
-           var mails = MyImapClient.GetNextMails(4);
-
-            if (downloadedMails.Count > 0)
-            {
-                downloadedMails.Clear();
-            }
+           var mails = _imapClient.GetNextMails(10);
             
             foreach (var mail in mails)
             {
-                downloadedMails.Add(new DownloadedMail
+                _imapMails.Add(new DownloadedMail
                 {
                     Id = mail.Id,
                     Subject = mail.Subject,
                     SenderName= mail.SenderName,
                     SenderEmail= mail.SenderEmail,
-                    Body = mail.Body
                 });
             }
 
-            return View(downloadedMails);
+            return View(_imapMails);
         }
         
         public IActionResult DownloadMail(int id)
         {
             
-
-            if (MyImapClient.DownloadMail(id) == false)
+            var response = GMailClient.DownloadMail(id);
+            if (response.Status == false)
             {
-                TempData["error"] = "Failed to download mail!";
-                return RedirectToAction("Login");
+                TempData["error"] = response.Message;
             }
 
             else
             {
                 TempData["success"] = "Success!";
-
             }
 
             return RedirectToAction("Mail");
@@ -124,21 +118,20 @@ namespace MyMail.Controllers
 
         public IActionResult GetPop3()
         {
-            var mails = MyPop3Client.DownloadMails(4);
-            var downloadedMails = new List<DownloadedMail>();
+            var mails = _pop3Client.GetNextMails(10);
 
             foreach (var mail in mails)
             {
-                downloadedMails.Add(new DownloadedMail
+                _pop3Mails.Add(new DownloadedMail
                 {
+                    Id=mail.Id,
                     Subject = mail.Subject,
                     SenderName = mail.SenderName,
                     SenderEmail = mail.SenderEmail,
-                    Body= mail.Body
                 });
             }
 
-            return View(downloadedMails);
+            return View(_pop3Mails);
         }
 
         public IActionResult Login()
@@ -158,16 +151,19 @@ namespace MyMail.Controllers
 
             UserConnect.Init(user);
 
-            if (UserConnect.Check() == false)
+            Response response = UserConnect.Check();
+            if (response.Status == false)
             {
-                TempData["error"] = "Failed to login!";
+                TempData["error"] = response.Message;
                 return RedirectToAction("Login");
             }
 
             else
             {
                 TempData["success"] = "Success!";
-                
+                var factory = new MailClientFactory();
+                _imapClient = factory.CreateMailClient("imap");
+                _pop3Client = factory.CreateMailClient("pop3");
             }
 
             return RedirectToAction("Mail");
@@ -196,9 +192,10 @@ namespace MyMail.Controllers
 
             ServerConnect.Init(server);
 
-            if (ServerConnect.Check() == false)
+            Response response = ServerConnect.Check();
+            if (response.Status == false)
             {
-                TempData["error"] = "Failed to connect!";
+                TempData["error"] = response.Message;
                 return View("Server");
             }
 
@@ -210,14 +207,15 @@ namespace MyMail.Controllers
             return View("Login");
 		}
 
-        public IActionResult ViewMail(string SenderEmail, string SenderName, string Body, string Subject) {
+        public IActionResult ViewMail(int id) {
 
+            var message = GMailClient.GetMail(id);
             DownloadedMail mail = new DownloadedMail
             {
-                SenderEmail = SenderEmail,
-                SenderName = SenderName,
-                Body = Body,
-                Subject = Subject
+                SenderEmail = message.SenderEmail,
+                SenderName = message.SenderName,
+                Body = message.Body,
+                Subject = message.Subject
             };
 
             return View(mail);
