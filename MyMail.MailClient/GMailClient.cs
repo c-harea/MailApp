@@ -37,18 +37,9 @@ namespace MyMail.MailClient
             for (int i = finish; i >= start; i--)
             {
                 var message = _client.GetMessage(i-1);
-                mails.Add(
-                    new Mail
-                    {
-                        Id = _mails.Count,
-                        SenderName = message.From.FirstOrDefault()?.Name,
-                        SenderEmail = message.From.FirstOrDefault()?.ToString(),
-                        RecipientName = message.To.FirstOrDefault()?.Name,
-                        RecipientEmail = message.To.FirstOrDefault()?.ToString(),
-                        Subject = message.Subject,
-                        Body = message.TextBody,
-                        AttachmenMime = message.Attachments.OfType<MimePart>().ToList()
-                    });
+                var mail = Mail.FromMimeMessage(message);
+                mail.Id = _mails.Count;
+                mails.Add(mail);
                 _mails.Add(message);
             }
             _client.Disconnect();
@@ -60,16 +51,7 @@ namespace MyMail.MailClient
         public static Mail GetMail(int id)
         {
             var message = _mails[id];
-            return new Mail
-            {
-                SenderName = message.From.FirstOrDefault()?.Name,
-                SenderEmail = message.From.FirstOrDefault()?.ToString(),
-                RecipientName = message.To.FirstOrDefault()?.Name,
-                RecipientEmail = message.To.FirstOrDefault()?.ToString(),
-                Subject = message.Subject,
-                Body = message.TextBody,
-                AttachmenMime = message.Attachments.OfType<MimePart>().ToList()
-            };
+            return Mail.FromMimeMessage(message);
         }
 
         public static Response DownloadMail(int id)
@@ -84,15 +66,12 @@ namespace MyMail.MailClient
                 var sanitizedSender = SanitizeFileName(senderEmail);
                 var sanitizedSubject = SanitizeFileName(subject);
 
-                var receiverEmail = message.To.FirstOrDefault()?.ToString();
-                var sanitizedReceiver = SanitizeFileName(receiverEmail);
-
                 var folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    "DownloadedMails", sanitizedReceiver, $"{sanitizedSender}[{sanitizedSubject}]");
+                    "DownloadedMails", $"({sanitizedSender})[{sanitizedSubject}]");
 
                 Directory.CreateDirectory(folderPath);
 
-                var savePath = Path.Combine(folderPath, $"{sanitizedSender}[{sanitizedSubject}].eml");
+                var savePath = Path.Combine(folderPath, $"{sanitizedSubject}.eml");
 
                 using (var stream = File.Create(savePath))
                 {

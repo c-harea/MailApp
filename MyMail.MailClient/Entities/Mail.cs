@@ -24,6 +24,20 @@ namespace MyMail.MailClient
 
         public List<string> AttachmentPaths { get; set; }
         public List<MimePart> AttachmenMime { get; set; }
+
+        public static Mail FromMimeMessage(MimeMessage message)
+        {
+            return new Mail
+            {
+                SenderName = message.From.FirstOrDefault()?.Name,
+                SenderEmail = message.From.FirstOrDefault()?.ToString(),
+                RecipientName = message.To.FirstOrDefault()?.Name,
+                RecipientEmail = message.To.FirstOrDefault()?.ToString(),
+                Subject = message.Subject,
+                Body = message.TextBody,
+                AttachmenMime = message.Attachments.OfType<MimePart>().ToList()
+            };
+        }
     }
 
     public enum Protocol

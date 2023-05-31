@@ -46,27 +46,7 @@ namespace MyMail.Controllers
         [HttpPost]
         public IActionResult SendMail(SendMailModel model)
         {
-            Mail mail = new Mail()
-            {
-                RecipientName = model.RecipientName,
-                RecipientEmail = model.RecipientEmail,
-                Subject = model.Subject,
-                Body = model.Body,
-                AttachmentPaths = new List<string>()
-            };
-
-            foreach (var attachment in model.Attachment)
-            {
-                string fileName = Path.GetFileName(attachment.FileName);
-                string filePath = Path.Combine("D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp\\", fileName);
-
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    attachment.CopyTo(stream);
-                    mail.AttachmentPaths.Add(filePath);
-                }
-  
-            }
+            Mail mail = SendMailModel.ToMail(model);
 
             var response = client.Send(mail);
             if(response.Status == false)
@@ -86,13 +66,7 @@ namespace MyMail.Controllers
             
             foreach (var mail in mails)
             {
-                _imapMails.Add(new DownloadedMail
-                {
-                    Id = mail.Id,
-                    Subject = mail.Subject,
-                    SenderName= mail.SenderName,
-                    SenderEmail= mail.SenderEmail,
-                });
+                _imapMails.Add(DownloadedMail.FromMail(mail));
             }
 
             return View(_imapMails);
@@ -122,13 +96,7 @@ namespace MyMail.Controllers
 
             foreach (var mail in mails)
             {
-                _pop3Mails.Add(new DownloadedMail
-                {
-                    Id=mail.Id,
-                    Subject = mail.Subject,
-                    SenderName = mail.SenderName,
-                    SenderEmail = mail.SenderEmail,
-                });
+                _pop3Mails.Add(DownloadedMail.FromMail(mail));
             }
 
             return View(_pop3Mails);
@@ -203,13 +171,7 @@ namespace MyMail.Controllers
         public IActionResult ViewMail(int id) {
 
             var message = client.GetMail(id);
-            DownloadedMail mail = new DownloadedMail
-            {
-                SenderEmail = message.SenderEmail,
-                SenderName = message.SenderName,
-                Body = message.Body,
-                Subject = message.Subject
-            };
+            DownloadedMail mail = DownloadedMail.FromMail(message);
 
             return View(mail);
         }
