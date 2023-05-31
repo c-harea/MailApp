@@ -4,13 +4,8 @@ namespace MailClient
 {
     public class MailSettings
     {
-        public string ServerName { get; private set; }
-        public int SmtpPort { get; private set; }
-        public int Pop3Port { get; private set; }
-        public int ImapPort { get; private set; }
-        public string Alias { get; private set; }
-        public string Email { get; private set; }
-        public string Password { get; private set; }
+        public Server server { get; private set; }
+        public User user { get; private set; }
 
         private static MailSettings _instance;
 
@@ -20,17 +15,12 @@ namespace MailClient
 
         public void SetServer(Server server)
         {
-            ServerName = server.ServerName;
-            SmtpPort = server.SmtpPort;
-            Pop3Port = server.Pop3Port;
-            ImapPort = server.ImapPort;
+            this.server = server;
         }
 
         public void SetUser(User user)
         {
-            Alias = user.Alias;
-            Email = user.Email;
-            Password = user.Password;
+            this.user = user;
         }
 
         public static MailSettings Instance

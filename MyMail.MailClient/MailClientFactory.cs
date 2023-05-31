@@ -10,17 +10,15 @@ namespace MyMail.MailClient
 {
     public class MailClientFactory
     {
-        public GMailClient CreateMailClient(string clientType)
+        public GMailClient CreateMailClient(object client)
         {
-            if (clientType == "imap")
+            if (client is ImapClient imapClient)
             {
-                var imapClient = new ImapClient();
                 var imapClientAdapter =  new ImapClientAdapter(imapClient);
                 return new GMailClient(imapClientAdapter);
             }
-            else if (clientType == "pop3")
+            else if (client is Pop3Client pop3Client)
             {
-                var pop3Client = new Pop3Client();
                 var pop3ClientAdapter = new Pop3ClientAdapter(pop3Client);
                 return new GMailClient(pop3ClientAdapter);
             }

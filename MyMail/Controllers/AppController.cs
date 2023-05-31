@@ -13,8 +13,7 @@ namespace MyMail.Controllers
     public class AppController : Controller
     {
         private readonly ILogger<AppController> _logger;
-        private static GMailClient _imapClient;
-        private static GMailClient _pop3Client;
+        private static EmailFacade client = new EmailFacade();
 
         private static List<DownloadedMail> _imapMails = new List<DownloadedMail>();
         private static List<DownloadedMail> _pop3Mails = new List<DownloadedMail>();
@@ -68,10 +67,11 @@ namespace MyMail.Controllers
                 }
   
             }
-            
-            if(MySmtpClient.Send(mail) == false)
+
+            var response = client.Send(mail);
+            if(response.Status == false)
             {
-                TempData["error"] = "Failed to send!";
+                TempData["error"] = response.Message;
                 return RedirectToAction("SendMail");
             }
 
@@ -82,7 +82,7 @@ namespace MyMail.Controllers
         public IActionResult GetImap()
         {
 
-           var mails = _imapClient.GetNextMails(10);
+           var mails = client.GetNextMails(10, Protocol.Imap);
             
             foreach (var mail in mails)
             {
@@ -101,7 +101,7 @@ namespace MyMail.Controllers
         public IActionResult DownloadMail(int id)
         {
             
-            var response = GMailClient.DownloadMail(id);
+            var response = client.DownloadMail(id);
             if (response.Status == false)
             {
                 TempData["error"] = response.Message;
@@ -118,7 +118,7 @@ namespace MyMail.Controllers
 
         public IActionResult GetPop3()
         {
-            var mails = _pop3Client.GetNextMails(10);
+            var mails = client.GetNextMails(10, Protocol.Pop3);
 
             foreach (var mail in mails)
             {
@@ -149,9 +149,7 @@ namespace MyMail.Controllers
                 Alias = model.Alias
             };
 
-            UserConnect.Init(user);
-
-            Response response = UserConnect.Check();
+            Response response = client.Authenticate(user);
             if (response.Status == false)
             {
                 TempData["error"] = response.Message;
@@ -161,9 +159,6 @@ namespace MyMail.Controllers
             else
             {
                 TempData["success"] = "Success!";
-                var factory = new MailClientFactory();
-                _imapClient = factory.CreateMailClient("imap");
-                _pop3Client = factory.CreateMailClient("pop3");
             }
 
             return RedirectToAction("Mail");
@@ -190,9 +185,7 @@ namespace MyMail.Controllers
                 Pop3Port = model.Pop3Port,
             };
 
-            ServerConnect.Init(server);
-
-            Response response = ServerConnect.Check();
+            Response response = client.Connect(server);
             if (response.Status == false)
             {
                 TempData["error"] = response.Message;
@@ -209,7 +202,7 @@ namespace MyMail.Controllers
 
         public IActionResult ViewMail(int id) {
 
-            var message = GMailClient.GetMail(id);
+            var message = client.GetMail(id);
             DownloadedMail mail = new DownloadedMail
             {
                 SenderEmail = message.SenderEmail,

@@ -25,4 +25,11 @@ namespace MyMail.MailClient
         public List<string> AttachmentPaths { get; set; }
         public List<MimePart> AttachmenMime { get; set; }
     }
+
+    public enum Protocol
+    {
+        Smtp,
+        Pop3,
+        Imap
+    }
 }

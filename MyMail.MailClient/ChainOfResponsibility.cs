@@ -43,7 +43,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform SMTP logic here
-                    smtp.Connect("smtp." + _mailSettings.ServerName, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
+                    smtp.Connect("smtp." + _mailSettings.server.ServerName, _mailSettings.server.SmtpPort, SecureSocketOptions.StartTls);
                     // If SMTP logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -82,7 +82,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform POP3 logic here
-                    pop3.Connect("pop." + _mailSettings.ServerName, _mailSettings.Pop3Port, SecureSocketOptions.Auto);
+                    pop3.Connect("pop." + _mailSettings.server.ServerName, _mailSettings.server.Pop3Port, SecureSocketOptions.Auto);
                     // If POP3 logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -121,7 +121,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform IMAP logic here
-                    imap.Connect("imap." + _mailSettings.ServerName, _mailSettings.ImapPort, SecureSocketOptions.SslOnConnect);
+                    imap.Connect("imap." + _mailSettings.server.ServerName, _mailSettings.server.ImapPort, SecureSocketOptions.SslOnConnect);
                     // If IMAP logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -160,7 +160,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform SMTP logic here
-                    smtp.Authenticate(_mailSettings.Email, _mailSettings.Password);
+                    smtp.Authenticate(_mailSettings.user.Email, _mailSettings.user.Password);
                     // If SMTP logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -199,7 +199,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform POP3 logic here
-                    pop3.Authenticate(_mailSettings.Email, _mailSettings.Password);
+                    pop3.Authenticate(_mailSettings.user.Email, _mailSettings.user.Password);
                     // If POP3 logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -238,7 +238,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform IMAP logic here
-                    imap.Authenticate(_mailSettings.Email, _mailSettings.Password);
+                    imap.Authenticate(_mailSettings.user.Email, _mailSettings.user.Password);
                     // If IMAP logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();

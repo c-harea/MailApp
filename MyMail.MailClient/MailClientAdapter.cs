@@ -36,7 +36,7 @@ namespace MyMail.MailClient
         {
             try
             {
-                _client.Connect("imap." + _mailSettings.ServerName, _mailSettings.ImapPort, SecureSocketOptions.SslOnConnect);
+                _client.Connect("imap." + _mailSettings.server.ServerName, _mailSettings.server.ImapPort, SecureSocketOptions.SslOnConnect);
                 return new Response { Status = true};
             }
             catch(Exception ex)
@@ -48,7 +48,7 @@ namespace MyMail.MailClient
         {
             try
             {
-                _client.Authenticate(_mailSettings.Email, _mailSettings.Password);
+                _client.Authenticate(_mailSettings.user.Email, _mailSettings.user.Password);
                 return new Response { Status = true };
             }
             catch (Exception ex)
@@ -82,7 +82,7 @@ namespace MyMail.MailClient
             }
             catch (Exception ex)
             {
-                _client.Authenticate(_mailSettings.Email, _mailSettings.Password);
+                _client.Authenticate(_mailSettings.user.Email, _mailSettings.user.Password);
                 return new Response { Status = false, Message = "Imap disconnection failed" };
             }
         }
@@ -101,7 +101,7 @@ namespace MyMail.MailClient
         {
             try
             {
-                _client.Connect("pop." + _mailSettings.ServerName, _mailSettings.Pop3Port, true);
+                _client.Connect("pop." + _mailSettings.server.ServerName, _mailSettings.server.Pop3Port, true);
                 return new Response { Status = true };
             }
             catch (Exception ex)
@@ -113,7 +113,7 @@ namespace MyMail.MailClient
         {
             try
             {
-                _client.Authenticate(_mailSettings.Email, _mailSettings.Password);
+                _client.Authenticate(_mailSettings.user.Email, _mailSettings.user.Password);
                 return new Response { Status = true };
             }
             catch (Exception ex)
@@ -145,7 +145,7 @@ namespace MyMail.MailClient
             }
             catch (Exception ex)
             {
-                _client.Authenticate(_mailSettings.Email, _mailSettings.Password);
+                _client.Authenticate(_mailSettings.user.Email, _mailSettings.user.Password);
                 return new Response { Status = false, Message = "Pop3 disconnection failed" };
             }
         }

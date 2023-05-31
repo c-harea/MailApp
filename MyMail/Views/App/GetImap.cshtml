@@ -20,7 +20,7 @@
             @foreach (var item in Model)
             {
                 <tr class="table-active">
-                    <td><a asp-action="ViewMail" asp-controller="App" asp-route-subject="@item.Subject" asp-route-sendername="@item.SenderName" asp-route-senderemail="@item.SenderEmail" asp-route-body="@item.Body">@item.SenderName</a></td>
+                    <td><a asp-action="ViewMail" asp-controller="App" asp-route-subject="@item.Id">@item.SenderName</a></td>
                     <td>@item.SenderEmail</td>                 
                     <td>@item.Subject</td>
                     <td><a asp-action="DownloadMail" asp-controller="App" asp-route-id="@item.Id"><img src="~/download.svg" alt="Description of the image"></a></td>
