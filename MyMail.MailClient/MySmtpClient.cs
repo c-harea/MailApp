@@ -7,19 +7,21 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using MyMail.MailClient;
+using MyMail.MailClient.Entities;
 using Org.BouncyCastle.Tls;
 
 namespace MyMail.MailClient
 {
     public static class MySmtpClient
     {
-        public static bool Send(Mail mail)
+        private static MailSettings _mailSettings = MailSettings.Instance;
+            public static bool Send(Mail mail)
         {
             var bodyBuilder = new BodyBuilder();
             bodyBuilder.TextBody = mail.Body;
 
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(Program.MailConfiguration.Alias, Program.MailConfiguration.Email));
+            message.From.Add(new MailboxAddress(_mailSettings.Alias, _mailSettings.Email));
             message.To.Add(new MailboxAddress(mail.RecipientName, mail.RecipientEmail));
             message.Subject = mail.Subject;
 
@@ -56,8 +58,8 @@ namespace MyMail.MailClient
             {
                 try
                 {
-                    client.Connect(("smtp." + Program.MailConfiguration.ServerName), Program.MailConfiguration.SmtpPort, SecureSocketOptions.StartTls);
-                    client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
+                    client.Connect(("smtp." + _mailSettings.ServerName), _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
+                    client.Authenticate(_mailSettings.Email, _mailSettings.Password);
                     client.Send(message);
 
            

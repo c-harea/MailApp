@@ -13,6 +13,7 @@ namespace MyMail.MailClient
     {
         protected Handler _nextHandler;
         protected object _client;
+        private static MailSettings _mailSettings = MailSettings.Instance;
 
         public Handler(object client)
         {
@@ -30,6 +31,7 @@ namespace MyMail.MailClient
     // Concrete SMTP handler
     public class SmtpConnect : Handler
     {
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public SmtpConnect(object client) : base(client)
         {
         }
@@ -41,7 +43,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform SMTP logic here
-                    smtp.Connect("smtp." + Program.MailConfiguration.ServerName, Program.MailConfiguration.SmtpPort, SecureSocketOptions.StartTls);
+                    smtp.Connect("smtp." + _mailSettings.ServerName, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
                     // If SMTP logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -68,6 +70,7 @@ namespace MyMail.MailClient
     // Concrete POP3 handler
     public class Pop3Connect : Handler
     {
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public Pop3Connect(object client) : base(client)
         {
         }
@@ -79,7 +82,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform POP3 logic here
-                    pop3.Connect("pop." + Program.MailConfiguration.ServerName, Program.MailConfiguration.Pop3Port, SecureSocketOptions.Auto);
+                    pop3.Connect("pop." + _mailSettings.ServerName, _mailSettings.Pop3Port, SecureSocketOptions.Auto);
                     // If POP3 logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -106,6 +109,7 @@ namespace MyMail.MailClient
     // Concrete IMAP handler
     public class ImapConnect : Handler
     {
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public ImapConnect(object client) : base(client)
         {
         }
@@ -117,7 +121,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform IMAP logic here
-                    imap.Connect("imap." + Program.MailConfiguration.ServerName, Program.MailConfiguration.ImapPort, SecureSocketOptions.SslOnConnect);
+                    imap.Connect("imap." + _mailSettings.ServerName, _mailSettings.ImapPort, SecureSocketOptions.SslOnConnect);
                     // If IMAP logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -144,6 +148,7 @@ namespace MyMail.MailClient
     // Concrete SMTP handler
     public class SmtpLogin : Handler
     {
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public SmtpLogin(object client) : base(client)
         {
         }
@@ -155,7 +160,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform SMTP logic here
-                    smtp.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
+                    smtp.Authenticate(_mailSettings.Email, _mailSettings.Password);
                     // If SMTP logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -182,6 +187,7 @@ namespace MyMail.MailClient
     // Concrete POP3 handler
     public class Pop3Login : Handler
     {
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public Pop3Login(object client) : base(client)
         {
         }
@@ -193,7 +199,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform POP3 logic here
-                    pop3.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
+                    pop3.Authenticate(_mailSettings.Email, _mailSettings.Password);
                     // If POP3 logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();
@@ -220,6 +226,7 @@ namespace MyMail.MailClient
     // Concrete IMAP handler
     public class ImapLogin : Handler
     {
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public ImapLogin(object client) : base(client)
         {
         }
@@ -231,7 +238,7 @@ namespace MyMail.MailClient
                 try
                 {
                     // Perform IMAP logic here
-                    imap.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
+                    imap.Authenticate(_mailSettings.Email, _mailSettings.Password);
                     // If IMAP logic succeeds, pass the request to the next handler
                     if (_nextHandler != null)
                         return _nextHandler.HandleRequest();

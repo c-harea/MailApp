@@ -15,11 +15,10 @@ namespace MailClient
         private static SmtpClient _smtpClient;
         private static Pop3Client _pop3Client;
         private static ImapClient _imapClient;
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public static void Init(User user)
         {
-            Program.MailConfiguration.Alias = user.Alias;
-            Program.MailConfiguration.Email = user.Email;
-            Program.MailConfiguration.Password = user.Password;
+            _mailSettings.SetUser(user);
 
             _smtpClient = new SmtpClient();
             _pop3Client = new Pop3Client();

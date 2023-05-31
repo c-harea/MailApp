@@ -16,12 +16,10 @@ namespace MailClient
         private static SmtpClient _smtpClient;
         private static Pop3Client _pop3Client;
         private static ImapClient _imapClient;
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public static void Init(Server server)
         {
-            Program.MailConfiguration.ServerName = server.ServerName;
-            Program.MailConfiguration.SmtpPort = server.SmtpPort;
-            Program.MailConfiguration.Pop3Port = server.Pop3Port;
-            Program.MailConfiguration.ImapPort = server.ImapPort;
+            _mailSettings.SetServer(server);
 
             _smtpClient = new SmtpClient();
             _pop3Client = new Pop3Client();

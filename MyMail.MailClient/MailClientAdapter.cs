@@ -26,6 +26,7 @@ namespace MyMail.MailClient
     public class ImapClientAdapter : IMailClient
     {
         private ImapClient _client;
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public ImapClientAdapter(ImapClient client)
         {
             _client = client;
@@ -35,7 +36,7 @@ namespace MyMail.MailClient
         {
             try
             {
-                _client.Connect("imap." + Program.MailConfiguration.ServerName, Program.MailConfiguration.ImapPort, SecureSocketOptions.SslOnConnect);
+                _client.Connect("imap." + _mailSettings.ServerName, _mailSettings.ImapPort, SecureSocketOptions.SslOnConnect);
                 return new Response { Status = true};
             }
             catch(Exception ex)
@@ -47,7 +48,7 @@ namespace MyMail.MailClient
         {
             try
             {
-                _client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
+                _client.Authenticate(_mailSettings.Email, _mailSettings.Password);
                 return new Response { Status = true };
             }
             catch (Exception ex)
@@ -81,7 +82,7 @@ namespace MyMail.MailClient
             }
             catch (Exception ex)
             {
-                _client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
+                _client.Authenticate(_mailSettings.Email, _mailSettings.Password);
                 return new Response { Status = false, Message = "Imap disconnection failed" };
             }
         }
@@ -90,6 +91,7 @@ namespace MyMail.MailClient
     public class Pop3ClientAdapter : IMailClient
     {
         private Pop3Client _client;
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public Pop3ClientAdapter(Pop3Client client)
         {
             _client = client;
@@ -99,7 +101,7 @@ namespace MyMail.MailClient
         {
             try
             {
-                _client.Connect("pop." + Program.MailConfiguration.ServerName, Program.MailConfiguration.Pop3Port, true);
+                _client.Connect("pop." + _mailSettings.ServerName, _mailSettings.Pop3Port, true);
                 return new Response { Status = true };
             }
             catch (Exception ex)
@@ -111,7 +113,7 @@ namespace MyMail.MailClient
         {
             try
             {
-                _client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
+                _client.Authenticate(_mailSettings.Email, _mailSettings.Password);
                 return new Response { Status = true };
             }
             catch (Exception ex)
@@ -143,7 +145,7 @@ namespace MyMail.MailClient
             }
             catch (Exception ex)
             {
-                _client.Authenticate(Program.MailConfiguration.Email, Program.MailConfiguration.Password);
+                _client.Authenticate(_mailSettings.Email, _mailSettings.Password);
                 return new Response { Status = false, Message = "Pop3 disconnection failed" };
             }
         }
