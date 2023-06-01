@@ -14,10 +14,6 @@ namespace MyMail.Controllers
     {
         private readonly ILogger<AppController> _logger;
         private static EmailFacade client = new EmailFacade();
-
-        private static List<DownloadedMail> _imapMails = new List<DownloadedMail>();
-        private static List<DownloadedMail> _pop3Mails = new List<DownloadedMail>();
-
         public AppController(ILogger<AppController> logger)
         {
             _logger = logger;
@@ -59,17 +55,19 @@ namespace MyMail.Controllers
             return View("Mail");
         }
 
-        public IActionResult GetImap()
+        public IActionResult GetImap(int page = 1)
         {
+            ViewBag.page = page;
+            var pageSize = 10;
 
-           var mails = client.GetNextMails(10, Protocol.Imap);
-            
+            var mails = client.GetMailPage(page, pageSize, Protocol.Imap);
+            List<DownloadedMail> webMail = new List<DownloadedMail>();
             foreach (var mail in mails)
             {
-                _imapMails.Add(DownloadedMail.FromMail(mail));
+                webMail.Add(DownloadedMail.FromMail(mail));
             }
 
-            return View(_imapMails);
+            return View(webMail);
         }
         
         public IActionResult DownloadMail(int id)
@@ -90,16 +88,20 @@ namespace MyMail.Controllers
         }
 
 
-        public IActionResult GetPop3()
+        public IActionResult GetPop3(int page = 1)
         {
-            var mails = client.GetNextMails(10, Protocol.Pop3);
+            ViewBag.page = page;
+            var pageSize = 10;
+
+            var mails = client.GetMailPage(page, pageSize, Protocol.Pop3);
+            List<DownloadedMail> webMail = new List<DownloadedMail>();
 
             foreach (var mail in mails)
             {
-                _pop3Mails.Add(DownloadedMail.FromMail(mail));
+                webMail.Add(DownloadedMail.FromMail(mail));
             }
 
-            return View(_pop3Mails);
+            return View(webMail);
         }
 
         public IActionResult Login()

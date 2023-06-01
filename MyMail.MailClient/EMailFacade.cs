@@ -19,6 +19,7 @@ namespace MyMail.MailClient
         private ImapClient _imapClient;
         private GMailClient _imapGClient;
         private GMailClient _pop3GClient;
+        private Protocol _lastClient;
 
         public EmailFacade()
         {
@@ -52,22 +53,54 @@ namespace MyMail.MailClient
         {
             if(protocol == Protocol.Pop3)
             {
+                _lastClient = Protocol.Pop3;
                 return _pop3GClient.GetNextMails(count);
             }
             else
             {
+                _lastClient = Protocol.Imap;
                 return _imapGClient.GetNextMails(count);
+            }
+        }
+
+        public List<Mail> GetMailPage(int page, int pageSize, Protocol protocol)
+        {
+            if (protocol == Protocol.Pop3)
+            {
+                _lastClient = Protocol.Pop3;
+                return _pop3GClient.GetMailPage(page, pageSize);
+            }
+            else
+            {
+                _lastClient = Protocol.Imap;
+                return _imapGClient.GetMailPage(page, pageSize);
             }
         }
 
         public Mail GetMail(int id)
         {
-            return GMailClient.GetMail(id);
+            if(_lastClient == Protocol.Pop3)
+            {
+                return _pop3GClient.GetMail(id);
+
+            }
+            else
+            {
+                return _imapGClient.GetMail(id);
+            }
         }
 
         public Response DownloadMail(int id)
         {
-            return GMailClient.DownloadMail(id);
+            if (_lastClient == Protocol.Pop3)
+            {
+                return _pop3GClient.DownloadMail(id);
+
+            }
+            else
+            {
+                return _imapGClient.DownloadMail(id);
+            }
         }
     }
 

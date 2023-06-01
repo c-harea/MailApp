@@ -2,17 +2,30 @@
 
 @{
     ViewData["Title"] = "Server";
+    var currentPage = Convert.ToInt32(ViewBag.page);
+    var nextPage = currentPage + 1;
+    var previousPage = currentPage - 1;
 }
+
+<div class="pagination-container">
+    @if (currentPage > 1)
+    {
+        <a href="@Url.Action("GetImap", new { page = previousPage })" class="btn btn-primary">Previous Page</a>
+    }
+    <a href="@Url.Action("GetImap", new { page = nextPage })" class="btn btn-primary">Next Page</a>
+    <p>Page @(currentPage)</p>
+</div>
+
 
 
 <div class="container my-container">
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Type</th>
-                <th scope="col">Column heading</th>
-                <th scope="col">Column heading</th>
-                <th scope="col">Column heading</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Download</th>
             </tr>
         </thead>
         <tbody>
@@ -21,28 +34,28 @@
             {
                 <tr class="table-active">
                     <td><a asp-action="ViewMail" asp-controller="App" asp-route-subject="@item.Id">@item.SenderName</a></td>
-                    <td>@item.SenderEmail</td>                 
+                    <td>@item.SenderEmail</td>
                     <td>@item.Subject</td>
                     <td><a asp-action="DownloadMail" asp-controller="App" asp-route-id="@item.Id"><img src="~/download.svg" alt="Description of the image"></a></td>
                 </tr>
             }
-              
+
         </tbody>
     </table>
 </div>
 
 
+<div class="pagination-container">
+    @if (currentPage > 1)
+    {
+        <a href="@Url.Action("GetImap", new { page = previousPage })" class="btn btn-primary">Previous Page</a>
+    }
+    <a href="@Url.Action("GetImap", new { page = nextPage })" class="btn btn-primary">Next Page</a>
+    <p>Page @(currentPage)</p>
+</div>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+<br />
+<br />
+<br />

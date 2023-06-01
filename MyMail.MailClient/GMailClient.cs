@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace MyMail.MailClient
     {
         private IMailClient _client;
         private int finish;
-        private static List<MimeMessage> _mails;
+        private List<MimeMessage> _mails;
 
         public GMailClient(IMailClient client)
         { 
@@ -48,13 +49,35 @@ namespace MyMail.MailClient
             return mails;
         }
 
-        public static Mail GetMail(int id)
+        public List<Mail> GetMailPage(int page, int pageSize)
+        {
+            int requiredMailsCount = (page - 1) * pageSize + pageSize;
+            int availableMailsCount = _mails.Count;
+
+            if(requiredMailsCount > availableMailsCount)
+            {
+                int neededMails = requiredMailsCount - availableMailsCount;
+                GetNextMails(neededMails);
+            }
+
+            var mails = new List<Mail>();
+
+            for (int i = (page - 1) * pageSize; i < requiredMailsCount; i++)
+            {
+                mails.Add(Mail.FromMimeMessage(_mails[i]));
+            }
+            
+            return mails;
+        }
+
+
+        public Mail GetMail(int id)
         {
             var message = _mails[id];
             return Mail.FromMimeMessage(message);
         }
 
-        public static Response DownloadMail(int id)
+        public Response DownloadMail(int id)
         {
             try
             {
