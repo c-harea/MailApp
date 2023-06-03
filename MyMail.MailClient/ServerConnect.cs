@@ -1,15 +1,17 @@
 using System;
 using System.IO;
+using MailClient;
 using MailKit.Net.Imap;
 using MailKit.Net.Pop3;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MyMail.MailClient.Entities;
 
-namespace MailClient
+namespace MyMail.MailClient
 {
     public static class ServerConnect
     {
+        private static IRequestHandler _handlerChain;
 
         public static void Init(Server server)
         {
@@ -21,33 +23,33 @@ namespace MailClient
 
         public static bool Check()
         {
-            // Try connecting to the SMTP, POP3, and IMAP servers
-            try
-            {
-                using (var smtpClient = new SmtpClient())
-                {
-                    smtpClient.Connect("smtp." + Program.MailConfiguration.ServerName, Program.MailConfiguration.SmtpPort, SecureSocketOptions.StartTls);
-                }
+            // Create the handler chain
+            BuildHandlerChain();
 
-                using (var pop3Client = new Pop3Client())
-                {
-                    pop3Client.Connect("pop." + Program.MailConfiguration.ServerName, Program.MailConfiguration.Pop3Port, SecureSocketOptions.Auto);
-                }
+            // Create a request object
+            var request = new ServerConnectRequest();
 
-                using (var imapClient = new ImapClient())
-                {
-                    imapClient.Connect("imap." + Program.MailConfiguration.ServerName, Program.MailConfiguration.ImapPort, SecureSocketOptions.SslOnConnect);
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            // Handle the request using the chain of handlers
+            _handlerChain.HandleRequest(request);
+
+            return request.IsConnected;
         }
 
-        
-        
+        private static void BuildHandlerChain()
+        {
+            // Create the handlers
+            var smtpHandler = new SmtpHandler();
+            var pop3Handler = new Pop3Handler();
+            var imapHandler = new ImapHandler();
+
+            // Build the chain
+            smtpHandler.SetNext(pop3Handler);
+            pop3Handler.SetNext(imapHandler);
+
+            // Set the chain as the handler chain
+            _handlerChain = smtpHandler;
+        }
     }
 }
+
 
