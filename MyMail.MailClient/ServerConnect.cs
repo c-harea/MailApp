@@ -1,55 +1,47 @@
 using System;
 using System.IO;
+using System.Reflection.Metadata;
 using MailClient;
 using MailKit.Net.Imap;
 using MailKit.Net.Pop3;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using MyMail.MailClient;
 using MyMail.MailClient.Entities;
 
 namespace MyMail.MailClient
 {
     public static class ServerConnect
     {
-        private static IRequestHandler _handlerChain;
-
+        static private Handler _hander;
+        private static SmtpClient _smtpClient;
+        private static Pop3Client _pop3Client;
+        private static ImapClient _imapClient;
+        private static MailSettings _mailSettings = MailSettings.Instance;
         public static void Init(Server server)
         {
-            Program.MailConfiguration.ServerName = server.ServerName;
-            Program.MailConfiguration.SmtpPort = server.SmtpPort;
-            Program.MailConfiguration.Pop3Port = server.Pop3Port;
-            Program.MailConfiguration.ImapPort = server.ImapPort;
+            _mailSettings.SetServer(server);
+
+            _smtpClient = new SmtpClient();
+            _pop3Client = new Pop3Client();
+            _imapClient = new ImapClient();
+
+            // Create Connect chain
+            Handler smtpConnect = new SmtpConnect(_smtpClient);
+            Handler pop3Connect = new Pop3Connect(_pop3Client);
+            Handler imapConnect = new ImapConnect(_imapClient);
+
+            // Set chain order
+            smtpConnect.SetNextHandler(pop3Connect);
+            pop3Connect.SetNextHandler(imapConnect);
+
+            _hander = smtpConnect;
         }
 
-        public static bool Check()
+        public static Response Check()
         {
-            // Create the handler chain
-            BuildHandlerChain();
-
-            // Create a request object
-            var request = new ServerConnectRequest();
-
-            // Handle the request using the chain of handlers
-            _handlerChain.HandleRequest(request);
-
-            return request.IsConnected;
-        }
-
-        private static void BuildHandlerChain()
-        {
-            // Create the handlers
-            var smtpHandler = new SmtpHandler();
-            var pop3Handler = new Pop3Handler();
-            var imapHandler = new ImapHandler();
-
-            // Build the chain
-            smtpHandler.SetNext(pop3Handler);
-            pop3Handler.SetNext(imapHandler);
-
-            // Set the chain as the handler chain
-            _handlerChain = smtpHandler;
+            return _hander.HandleRequest();
         }
     }
 }
-
 

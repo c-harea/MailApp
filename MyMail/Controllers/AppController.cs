@@ -13,7 +13,7 @@ namespace MyMail.Controllers
     public class AppController : Controller
     {
         private readonly ILogger<AppController> _logger;
-
+        private static EmailFacade client = new EmailFacade();
         public AppController(ILogger<AppController> logger)
         {
             _logger = logger;
@@ -42,31 +42,12 @@ namespace MyMail.Controllers
         [HttpPost]
         public IActionResult SendMail(SendMailModel model)
         {
-            Mail mail = new Mail()
-            {
-                RecipientName = model.RecipientName,
-                RecipientEmail = model.RecipientEmail,
-                Subject = model.Subject,
-                Body = model.Body,
-                AttachmentPaths = new List<string>()
-            };
+            Mail mail = SendMailModel.ToMail(model);
 
-            foreach (var attachment in model.Attachment)
+            var response = client.Send(mail);
+            if(response.Status == false)
             {
-                string fileName = Path.GetFileName(attachment.FileName);
-                string filePath = Path.Combine("D:\\Docs\\UTM Folder\\Anul 3\\TMPS\\Proiect Curs\\MyMail\\temp\\", fileName);
-
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    attachment.CopyTo(stream);
-                    mail.AttachmentPaths.Add(filePath);
-                }
-  
-            }
-            
-            if(MySmtpClient.Send(mail) == false)
-            {
-                TempData["error"] = "Failed to send!";
+                TempData["error"] = response.Message;
                 return RedirectToAction("SendMail");
             }
 
@@ -74,71 +55,53 @@ namespace MyMail.Controllers
             return View("Mail");
         }
 
-        public IActionResult GetImap()
+        public IActionResult GetImap(int page = 1)
         {
-           MyImapClient.Initialize();
+            ViewBag.page = page;
+            var pageSize = 10;
 
-           var downloadedMails = new List<DownloadedMail>();
-
-           var mails = MyImapClient.GetNextMails(4);
-
-            if (downloadedMails.Count > 0)
-            {
-                downloadedMails.Clear();
-            }
-            
+            var mails = client.GetMailPage(page, pageSize, Protocol.Imap);
+            List<DownloadedMail> webMail = new List<DownloadedMail>();
             foreach (var mail in mails)
             {
-                downloadedMails.Add(new DownloadedMail
-                {
-                    Id = mail.Id,
-                    Subject = mail.Subject,
-                    SenderName= mail.SenderName,
-                    SenderEmail= mail.SenderEmail,
-                    Body = mail.Body
-                });
+                webMail.Add(DownloadedMail.FromMail(mail));
             }
 
-            return View(downloadedMails);
+            return View(webMail);
         }
         
         public IActionResult DownloadMail(int id)
         {
             
-
-            if (MyImapClient.DownloadMail(id) == false)
+            var response = client.DownloadMail(id);
+            if (response.Status == false)
             {
-                TempData["error"] = "Failed to download mail!";
-                return RedirectToAction("Login");
+                TempData["error"] = response.Message;
             }
 
             else
             {
                 TempData["success"] = "Success!";
-
             }
 
             return RedirectToAction("Mail");
         }
 
 
-        public IActionResult GetPop3()
+        public IActionResult GetPop3(int page = 1)
         {
-            var mails = MyPop3Client.DownloadMails(4);
-            var downloadedMails = new List<DownloadedMail>();
+            ViewBag.page = page;
+            var pageSize = 10;
+
+            var mails = client.GetMailPage(page, pageSize, Protocol.Pop3);
+            List<DownloadedMail> webMail = new List<DownloadedMail>();
 
             foreach (var mail in mails)
             {
-                downloadedMails.Add(new DownloadedMail
-                {
-                    Subject = mail.Subject,
-                    SenderName = mail.SenderName,
-                    SenderEmail = mail.SenderEmail,
-                    Body= mail.Body
-                });
+                webMail.Add(DownloadedMail.FromMail(mail));
             }
 
-            return View(downloadedMails);
+            return View(webMail);
         }
 
         public IActionResult Login()
@@ -156,18 +119,16 @@ namespace MyMail.Controllers
                 Alias = model.Alias
             };
 
-            UserConnect.Init(user);
-
-            if (UserConnect.Check() == false)
+            Response response = client.Authenticate(user);
+            if (response.Status == false)
             {
-                TempData["error"] = "Failed to login!";
+                TempData["error"] = response.Message;
                 return RedirectToAction("Login");
             }
 
             else
             {
                 TempData["success"] = "Success!";
-                
             }
 
             return RedirectToAction("Mail");
@@ -194,11 +155,10 @@ namespace MyMail.Controllers
                 Pop3Port = model.Pop3Port,
             };
 
-            ServerConnect.Init(server);
-
-            if (ServerConnect.Check() == false)
+            Response response = client.Connect(server);
+            if (response.Status == false)
             {
-                TempData["error"] = "Failed to connect!";
+                TempData["error"] = response.Message;
                 return View("Server");
             }
 
@@ -210,15 +170,10 @@ namespace MyMail.Controllers
             return View("Login");
 		}
 
-        public IActionResult ViewMail(string SenderEmail, string SenderName, string Body, string Subject) {
+        public IActionResult ViewMail(int id) {
 
-            DownloadedMail mail = new DownloadedMail
-            {
-                SenderEmail = SenderEmail,
-                SenderName = SenderName,
-                Body = Body,
-                Subject = Subject
-            };
+            var message = client.GetMail(id);
+            DownloadedMail mail = DownloadedMail.FromMail(message);
 
             return View(mail);
         }

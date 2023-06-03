@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MyMail.MailClient;
 
 namespace MyMail.Models
 {
@@ -13,5 +14,17 @@ namespace MyMail.Models
 
         public string Subject { get; set; }
         public string Body { get; set; }
+
+        public static DownloadedMail FromMail(Mail mail)
+        {
+            return new DownloadedMail
+            {
+                Id = mail.Id,
+                SenderEmail = mail.SenderEmail,
+                SenderName = mail.SenderName,
+                Body = mail.Body,
+                Subject = mail.Subject
+            };
+        }
     }
 }
