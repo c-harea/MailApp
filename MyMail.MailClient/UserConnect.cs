@@ -9,14 +9,14 @@ using MyMail.MailClient.Entities;
 
 namespace MailClient
 {
-    public static class UserConnect
+    public class UserConnect
     {
-        static private Handler _hander;
-        private static SmtpClient _smtpClient;
-        private static Pop3Client _pop3Client;
-        private static ImapClient _imapClient;
-        private static MailSettings _mailSettings = MailSettings.Instance;
-        public static void Init(User user)
+        private Handler _hander;
+        private SmtpClient _smtpClient;
+        private Pop3Client _pop3Client;
+        private ImapClient _imapClient;
+        private MailSettings _mailSettings = MailSettings.Instance;
+        public UserConnect(User user)
         {
             _mailSettings.SetUser(user);
 
@@ -44,7 +44,7 @@ namespace MailClient
             _hander = smtpConnect;
         }
 
-        public static Response Check()
+        public Response Check()
         {
             return _hander.HandleRequest();
         }

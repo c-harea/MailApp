@@ -13,35 +13,40 @@ namespace MyMail.MailClient
 {
     public class EmailFacade
     {
-
-        private SmtpClient _smtpClient;
-        private Pop3Client _pop3Client;
-        private ImapClient _imapClient;
-        private GMailClient _imapGClient;
+        private IMailClientStrategy _mailClientStrategy;
         private GMailClient _pop3GClient;
-        private Protocol _lastClient;
+        private GMailClient _imapGClient;
 
         public EmailFacade()
         {
-            _smtpClient = new SmtpClient();
-            _pop3Client = new Pop3Client();
-            _imapClient = new ImapClient();
-
             var factory = new MailClientFactory();
-            _imapGClient = factory.CreateMailClient(_imapClient);
-            _pop3GClient = factory.CreateMailClient(_pop3Client);
+            var pop3Client = factory.CreateMailClient(new Pop3Client());
+            var imapClient = factory.CreateMailClient(new ImapClient());
+
+            _pop3GClient = pop3Client;
+            _imapGClient = imapClient;
+
+            if (_pop3GClient != null)
+            {
+                _mailClientStrategy = new POP3MailClientStrategy(_pop3GClient);
+            }
+            else
+            {
+                _mailClientStrategy = new IMAPMailClientStrategy(_imapGClient);
+            }
+    
         }
 
         public Response Connect(Server server)
         {
-            ServerConnect.Init(server);
-            return ServerConnect.Check();
+            var serverConnect = new ServerConnect(server);
+            return serverConnect.Check();
         }
 
         public Response Authenticate(User user)
         {
-            UserConnect.Init(user);
-            return UserConnect.Check();
+            var userConnect = new UserConnect(user);
+            return userConnect.Check();
         }
 
         public Response Send(Mail mail)
@@ -49,58 +54,31 @@ namespace MyMail.MailClient
             return MySmtpClient.Send(mail);
         }
 
-        public List<Mail> GetNextMails(int count, Protocol protocol)
-        {
-            if(protocol == Protocol.Pop3)
-            {
-                _lastClient = Protocol.Pop3;
-                return _pop3GClient.GetNextMails(count);
-            }
-            else
-            {
-                _lastClient = Protocol.Imap;
-                return _imapGClient.GetNextMails(count);
-            }
-        }
-
-        public List<Mail> GetMailPage(int page, int pageSize, Protocol protocol)
+        public void SetMailRetrievalProtocol(Protocol protocol)
         {
             if (protocol == Protocol.Pop3)
             {
-                _lastClient = Protocol.Pop3;
-                return _pop3GClient.GetMailPage(page, pageSize);
+                _mailClientStrategy = new POP3MailClientStrategy(_pop3GClient);
             }
             else
             {
-                _lastClient = Protocol.Imap;
-                return _imapGClient.GetMailPage(page, pageSize);
+                _mailClientStrategy = new IMAPMailClientStrategy(_imapGClient);
             }
+        }
+
+        public List<Mail> GetMailPage(int page, int pageSize)
+        {
+            return _mailClientStrategy.GetMailPage(page, pageSize);
         }
 
         public Mail GetMail(int id)
         {
-            if(_lastClient == Protocol.Pop3)
-            {
-                return _pop3GClient.GetMail(id);
-
-            }
-            else
-            {
-                return _imapGClient.GetMail(id);
-            }
+            return _mailClientStrategy.GetMail(id);
         }
 
         public Response DownloadMail(int id)
         {
-            if (_lastClient == Protocol.Pop3)
-            {
-                return _pop3GClient.DownloadMail(id);
-
-            }
-            else
-            {
-                return _imapGClient.DownloadMail(id);
-            }
+            return _mailClientStrategy.DownloadMail(id);
         }
     }
 

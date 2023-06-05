@@ -60,7 +60,8 @@ namespace MyMail.Controllers
             ViewBag.page = page;
             var pageSize = 10;
 
-            var mails = client.GetMailPage(page, pageSize, Protocol.Imap);
+            client.SetMailRetrievalProtocol(Protocol.Imap);
+            var mails = client.GetMailPage(page, pageSize);
             List<DownloadedMail> webMail = new List<DownloadedMail>();
             foreach (var mail in mails)
             {
@@ -93,7 +94,8 @@ namespace MyMail.Controllers
             ViewBag.page = page;
             var pageSize = 10;
 
-            var mails = client.GetMailPage(page, pageSize, Protocol.Pop3);
+            client.SetMailRetrievalProtocol(Protocol.Pop3);
+            var mails = client.GetMailPage(page, pageSize);
             List<DownloadedMail> webMail = new List<DownloadedMail>();
 
             foreach (var mail in mails)

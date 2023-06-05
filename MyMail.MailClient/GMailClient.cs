@@ -22,7 +22,7 @@ namespace MyMail.MailClient
             finish = -1;
         }
 
-        public List<Mail> GetNextMails(int count)
+        private List<Mail> GetNextMails(int count)
         {
             _client.Connect();
             _client.Authenticate();
